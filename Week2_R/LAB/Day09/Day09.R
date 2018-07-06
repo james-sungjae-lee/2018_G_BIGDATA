@@ -148,7 +148,6 @@ setwd('/Users/sungjae/desktop')
 
 #
 
-install.packages('foreign')
 library(foreign)
 
 Profit <- read.spss('Profit.sav', use.value.labels = T, to.data.frame = T, reencode='euc-kr')
