@@ -1,12 +1,11 @@
-install.packages('httr')
-install.packages('rvest')
+
 library(httr)
 library(rvest)
 Sys.setlocale(category = "LC_CTYPE", locale = "ko_KR.UTF-8")
 
 text_all = c()
 
-base_url <- 'http://news.naver.com/main/list.nhn?mode=LSD&mid=sec&sid1=103&date=20180629&page='
+base_url <- 'http://news.naver.com/main/list.nhn?mode=LSD&mid=sec&sid1=103&date=20180707&page='
 
 for (j in 1:10){
   url_news <- paste(base_url, j, sep = '')
@@ -41,12 +40,14 @@ clz_news = gsub('[가-힣]{2,5}뉴스+', ' ', clz_news)
 clz_news = gsub('[[:space:]]+', ' ', clz_news)
 
 n_news = clz_news[nchar(clz_news) < 1000]
+nchar(n_news)
 write.csv(n_news, 'n_news.csv')
-
-install.packages('RMySQL')
+setwd('/Users/sungjae/desktop')
+getwd()
+n_news
 library(RMySQL)
 con = dbConnect(drv = MySQL(), 
-                dbname = 'news',
+                dbname = 'my_news',
                 user = 'root',
                 password = '1234',
                 host = 'localhost',
@@ -56,13 +57,16 @@ con = dbConnect(drv = MySQL(),
 dbListTables(con)
 dbListFields(con, 'news')
 
-db_news = dbGetQuery(con, 'SELECT * FROM news where no = 1')
+db_news = dbGetQuery(con, 'SELECT text FROM news where no = 1')
+db_news
+
 db_news$text <- repair_encoding(db_news$text)
 db_news[1, 2]
 
 Encoding(db_news[1, 2])
 repair_encoding(db_news$text)
-iconv(db_news$text, from = '', to = 'EUC-KR')
+iconv(db_news$text, from = 'ASCII', to = 'UTF-8')
+
 
 dbDisconnect(con)
 
