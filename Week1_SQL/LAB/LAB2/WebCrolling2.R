@@ -81,6 +81,7 @@ df_wc <- data.frame(word = word_name, freq = word_freq)
 library(wordcloud2)
 library(htmlwidgets)
 getwd()
+setwd('/Users/sungjae/desktop')
 wc <- wordcloud2(df_wc, color = 'random-dark')
 saveWidget(wc, 'wc.html', selfcontained = F)
 
@@ -90,8 +91,13 @@ library(qgraph)
 
 word_order <- order(word_freq, decreasing = T)[1 : 50]
 occ_mat <- ko_mat[word_order]
-occ_mat <- occ_mat %*% t(occ_mat)
+occ_mat2 <- occ_mat %*% t(occ_mat)
 
+png('associ.png', width = 500, height = 500)
+quartz(width = 7, height = 7, bg = 'white')
 
-
-
+qgraph(occ_mat2, layout = 'spring','circle', color = 'blue',
+       vsize = log(diag(occ_mat2)),
+       label.color = 'black', labels = colnames(occ_mat2),
+       diag = F)
+dev.off()
