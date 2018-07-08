@@ -11,7 +11,7 @@ Sys.setlocale(category = "LC_CTYPE", locale = "ko_KR.UTF-8")
 
 text_all = c()
 
-base_url <- 'http://news.naver.com/main/list.nhn?mode=LSD&mid=sec&sid1=103&date=20180707&page='
+base_url <- 'http://news.naver.com/main/list.nhn?mode=LSD&mid=sec&sid1=103&date=20180708&page='
 
 for (j in 1:10){
   url_news <- paste(base_url, j, sep = '')
@@ -90,14 +90,18 @@ saveWidget(wc, 'wc.html', selfcontained = F)
 library(qgraph)
 
 word_order <- order(word_freq, decreasing = T)[1 : 50]
-occ_mat <- ko_mat[word_order]
+occ_mat <- ko_mat[word_order,]
 occ_mat2 <- occ_mat %*% t(occ_mat)
+View(occ_mat2)
 
-png('associ.png', width = 500, height = 500)
-quartz(width = 7, height = 7, bg = 'white')
+quartz(width = 20, height = 20, bg = 'transparent')
+par(family = 'AppleGothic')
 
-qgraph(occ_mat2, layout = 'spring','circle', color = 'blue',
+qgraph(occ_mat2,
+       layout = 'spring',
+       color = 'grey',
        vsize = log(diag(occ_mat2)),
        label.color = 'black', labels = colnames(occ_mat2),
        diag = F)
-dev.off()
+
+quartz.save(file = 'word_qgraph.png', type = 'png', device = dev.cur())
