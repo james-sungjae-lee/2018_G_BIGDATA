@@ -1,0 +1,20 @@
+car : 자동차 종류 M1, M2, M3, M4, M5
+additive :첨가제 종류 A, B, C
+efficiency : 연비
+
+car	additive	efficiency
+M1	A	12
+M1	B	11
+M1	C	13
+M2	A	15
+M2	B	12
+M2	C	18
+M3	A	13
+M3	B	11
+M3	C	18
+M4	A	14
+M4	B	12
+M4	C	22
+M5	A	16
+M5	B	14
+M5	C	21
