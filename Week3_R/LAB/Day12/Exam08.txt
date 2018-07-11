@@ -1,0 +1,17 @@
+position : 진열대 위치 under-아래칸, middle-중간칸, upper-위칸
+size : 진열대 공간 넓이 normal-보통, wide-넓은
+sales : 판매량
+
+position	size	sales
+under	nomal	47
+under	nomal	43
+under	wide	45
+under	wide	51
+middle	nomal	62
+middle	nomal	68
+middle	wide	67
+middle	wide	71
+upper	nomal	41
+upper	nomal	39
+upper	wide	42
+upper	wide	46

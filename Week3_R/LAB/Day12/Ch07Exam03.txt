@@ -1,0 +1,15 @@
+stid : 학생
+statistics : 통계학 점수
+calculus : 미적분학 점수
+
+stid	statistics	calculus
+1	39	65
+2	43	78
+3	21	52
+4	64	82
+5	57	92
+6	47	89
+7	28	73
+8	75	98
+9	34	56
+10	52	75

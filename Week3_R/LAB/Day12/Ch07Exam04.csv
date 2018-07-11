@@ -1,0 +1,10 @@
+alcohol : 음주량
+response : 반응시간
+
+alcohol,response
+4,22
+8,34
+12,36
+16,50
+20,54
+24,66
