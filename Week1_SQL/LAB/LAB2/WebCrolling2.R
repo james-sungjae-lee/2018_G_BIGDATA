@@ -1,4 +1,4 @@
-# 20180707
+# 20180720
 # Sungjae Lee
 
 # Import Library and Setting Encoding
@@ -7,43 +7,21 @@ library(httr)
 library(rvest)
 Sys.setlocale(category = "LC_CTYPE", locale = "ko_KR.UTF-8")
 
-# Get news data from web site
+rawHTML <- paste(readLines("idea.html"), collapse="\n")
+myhtml <- read_html(rawHTML)
 
-text_all = c()
+idea_heads <- html_text(myhtml, 'div.idea h4')
+idea_contents <- html_text(myhtml, 'div.idea p')
 
-base_url <- 'http://news.naver.com/main/list.nhn?mode=LSD&mid=sec&sid1=103&date=20180708&page='
+idea_all <- paste(idea_heads, idea_contents)
 
-for (j in 1:10){
-  url_news <- paste(base_url, j, sep = '')
-  
-  html_news <- GET(url_news)
-  html_news01 <- read_html(html_news)
-  link_news <- html_nodes(html_news01, 'div.list_body a')
-  link_news01 <- html_attr(link_news, 'href')
-  link_news02 <- unique(link_news01)
-  link_news03 <- grep('news.naver.com', link_news02, value = T)
-  
-  
-  for(i in 1:length(link_news03)){
-    http_contents <- GET(link_news03[i])
-    html_contents <- read_html(http_contents)
-    
-    contents_area <- html_nodes(html_contents, 'div#articleBodyContents')
-    
-    text <- html_text(contents_area)
-    text_all <- c(text_all, text)
-  }
-  Sys.sleep(time = 2)
-}
+# Edit idea data
 
-# Edit news data
-
-clz_news = gsub('^.+\\{\\}', ' ', text_all)
-clz_news = gsub('[[:punct:]]', ' ', clz_news)
-clz_news = gsub('[A-Za-z0-9]', ' ', clz_news)
-clz_news = gsub('[가-힣]{2,5}뉴스+', ' ', clz_news)
-clz_news = gsub('[[:space:]]+', ' ', clz_news)
-clz_news[1]
+idea_all = gsub('^.+\\{\\}', ' ', idea_all)
+idea_all = gsub('[[:punct:]]', ' ', idea_all)
+idea_all = gsub('[A-Za-z0-9]', ' ', idea_all)
+idea_all = gsub('[[:space:]]+', ' ', idea_all)
+idea_all[1]
 
 # Install Korean Natural Language Processing package
 
@@ -59,7 +37,7 @@ ko_word = function(input){
   extractNoun(text)
 }
 
-cps = VCorpus(VectorSource(clz_news))
+cps = VCorpus(VectorSource(idea_all))
 ko_tdm <- TermDocumentMatrix(cps,
                              control = list(
                                tokenize = ko_word,
@@ -77,31 +55,14 @@ str(word_freq)
 word_name = names(word_freq)
 
 df_wc <- data.frame(word = word_name, freq = word_freq)
+df_wc <- subset(df_wc, word != '서비스')
+df_wc <- subset(df_wc, word != '플랫폼')
+df_wc <- subset(df_wc, word != '시스템')
+df_wc <- subset(df_wc, word != '사이트')
+df_wc <- subset(df_wc, word != '아이디어')
 
 library(wordcloud2)
 library(htmlwidgets)
-getwd()
-setwd('/Users/sungjae/desktop')
+
 wc <- wordcloud2(df_wc, color = 'random-dark')
 saveWidget(wc, 'wc.html', selfcontained = F)
-
-# Create Word Relationship Graph
-
-library(qgraph)
-
-word_order <- order(word_freq, decreasing = T)[1 : 50]
-occ_mat <- ko_mat[word_order,]
-occ_mat2 <- occ_mat %*% t(occ_mat)
-View(occ_mat2)
-
-quartz(width = 20, height = 20, bg = 'transparent')
-par(family = 'AppleGothic')
-
-qgraph(occ_mat2,
-       layout = 'spring',
-       color = 'grey',
-       vsize = log(diag(occ_mat2)),
-       label.color = 'black', labels = colnames(occ_mat2),
-       diag = F)
-
-quartz.save(file = 'word_qgraph.png', type = 'png', device = dev.cur())
