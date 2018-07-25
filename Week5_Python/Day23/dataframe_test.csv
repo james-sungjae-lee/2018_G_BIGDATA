@@ -1,0 +1,6 @@
+,first_name,last_name,age,city,sex,debt
+0,Jason,Miller,42,San Francisco,M,True
+1,Molly,Jacobson,52,Baltimore,F,True
+2,Tina,Ali,36,Miami,,False
+3,Jake,Milner,24,Douglas,F,False
+4,Amy,Cooze,73,Boston,,True
