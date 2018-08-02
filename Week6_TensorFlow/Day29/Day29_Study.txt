@@ -1,0 +1,29 @@
+Day29
+
+1. Linear Regression
+
+연속적인 X 에 따른, 연속적인 y 값의 추론
+y^ = H(x) = wx
+cost(w) = 1/m(H-Y)^2
+
+H(x) 는 Hypothesis 이며, cost 가 최저가 되는 w 값을 찾는 것이다
+
+
+2. Logistic Regression
+
+연속적인 X 들에 따른, 이항적인 y 값의 추론
+H(x) = sigmoid(wx) = 1/(1+e^(w^Tx))
+cost(w) = (-1/m) * SIGMA(y log (H(x)) + (1-y)*(log(1-H(x)))
+
+3. Softmax Classification
+
+여러 군집의 y값에 대한 추론
+softmax function = (e^yi) / SIGMAj(e^yi)
+z1 -> softmax -> 0.4 -> 선택
+z2 -> softmax -> 0.2
+z3 -> softmax -> 0.3
+z4 -> softmax -> 0.1
+
+H(x) = tf.nn.softmax(wx + b)
+cost(w) = cross-entoropy
+
